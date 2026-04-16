@@ -11,7 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
-import { Menu, LogOut, User, Settings, Bell } from 'lucide-react';
+import { Menu, LogOut, User, Settings, Bell, Zap } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
@@ -27,62 +28,75 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-30 flex h-20 w-full items-center justify-between border-b-2 border-border bg-background/95 px-8 backdrop-blur shadow-sm">
       <div className="flex items-center gap-4">
         <button
           onClick={onMenuClick}
-          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-muted text-muted-foreground"
+          className="lg:hidden flex h-10 w-10 items-center justify-center rounded-none border-2 border-border bg-background hover:bg-muted text-muted-foreground transition-all"
         >
-          <Menu className="h-4 w-4" />
+          <Menu className="h-5 w-5" />
         </button>
+        <div className="hidden lg:flex items-center gap-3">
+           <Zap className="w-5 h-5 text-primary fill-primary animate-pulse" />
+           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">Neuro-Sync Online</span>
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <button className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted text-muted-foreground transition-colors mr-2">
-           <Bell className="h-4 w-4" />
+      <div className="flex items-center gap-4 h-full">
+        <button className="hidden sm:flex h-10 w-10 items-center justify-center rounded-none border-2 border-border hover:bg-muted text-muted-foreground transition-all">
+           <Bell className="h-5 w-5" />
         </button>
+
+        <div className="h-10 w-[2px] bg-border mx-2 hidden sm:block" />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-9 gap-2 px-2 hover:bg-muted rounded-md focus-visible:ring-1 focus-visible:ring-ring">
-              <div className="h-6 w-6 rounded-full bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center text-zinc-50 dark:text-zinc-900">
-                <span className="text-xs font-semibold">
+            <Button variant="ghost" className="h-12 gap-4 px-4 hover:bg-muted rounded-none border-2 border-transparent hover:border-border transition-all group">
+              <div className="flex flex-col items-end hidden sm:flex">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors">Authenticated</span>
+                <span className="text-sm font-black uppercase tracking-tight text-foreground">{user?.name || 'Authorized User'}</span>
+              </div>
+              <div className="h-8 w-8 rounded-none border-2 border-zinc-900 bg-zinc-900 dark:border-zinc-100 dark:bg-zinc-100 flex items-center justify-center text-zinc-50 dark:text-zinc-900 group-hover:scale-110 transition-transform">
+                <span className="text-xs font-black">
                   {user?.name?.charAt(0).toUpperCase() || 'U'}
                 </span>
               </div>
-              <span className="hidden sm:inline text-sm font-medium">{user?.name || 'User'}</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 rounded-lg p-1">
-            <DropdownMenuLabel className="font-normal px-2 py-1.5">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{user?.name || 'User'}</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {user?.email || 'user@example.com'}
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+          <DropdownMenuContent align="end" className="w-64 rounded-none border-2 border-border p-0 shadow-2xl">
+            <div className="bg-muted/50 p-4 border-b-2 border-border">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">User Identifier</p>
+                <p className="text-sm font-black uppercase text-foreground truncate">{user?.name || 'User'}</p>
+                <p className="text-[9px] font-bold text-muted-foreground truncate italic">{user?.email || 'user@example.com'}</p>
+            </div>
             
-            <DropdownMenuItem className="gap-2 cursor-pointer rounded-md">
-              <User className="h-4 w-4 text-muted-foreground" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            
-            <DropdownMenuItem className="gap-2 cursor-pointer rounded-md">
-              <Settings className="h-4 w-4 text-muted-foreground" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            
-            <DropdownMenuSeparator />
-            
-            <DropdownMenuItem 
-              onClick={handleLogout} 
-              className="gap-2 cursor-pointer rounded-md text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/50"
-            >
-              <LogOut className="h-4 w-4" />
-              <span>Sign out</span>
-            </DropdownMenuItem>
+            <div className="p-1">
+              <DropdownMenuItem 
+                onClick={() => router.push('/dashboard/profile')}
+                className="gap-3 cursor-pointer rounded-none font-bold uppercase text-[10px] tracking-widest py-3"
+              >
+                <User className="h-4 w-4 text-primary" />
+                <span>Access Profile</span>
+              </DropdownMenuItem>
+              
+              <DropdownMenuItem 
+                onClick={() => router.push('/dashboard/settings')}
+                className="gap-3 cursor-pointer rounded-none font-bold uppercase text-[10px] tracking-widest py-3"
+              >
+                <Settings className="h-4 w-4 text-primary" />
+                <span>System Config</span>
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator className="bg-border h-[2px] my-1" />
+              
+              <DropdownMenuItem 
+                onClick={handleLogout} 
+                className="gap-3 cursor-pointer rounded-none font-black uppercase text-[10px] tracking-widest py-3 text-destructive focus:bg-destructive focus:text-white"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Terminate Session</span>
+              </DropdownMenuItem>
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

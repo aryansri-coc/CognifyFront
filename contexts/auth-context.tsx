@@ -29,24 +29,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check if user is already logged in on mount
   useEffect(() => {
-    const token = ApiClient.getStoredToken();
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        setUser({
-          id: payload.userId || 'unknown-id',
-          email: payload.email || 'user',
-          name: payload.name || 'User',
-          role: payload.role || 'USER',
-        });
-      } catch (e) {
-        // Fallback user if token parsing fails
-        setUser({ id: 'unknown-id', email: 'user', name: 'User', role: 'USER' });
+    const initAuth = async () => {
+      const token = ApiClient.getStoredToken();
+      if (token) {
+        try {
+          // Initial optimistic set from token
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          setUser({
+            id: payload.userId || 'unknown-id',
+            email: payload.email || 'user',
+            name: payload.name || 'User',
+            role: payload.role || 'USER',
+          });
+
+          // Fetch full profile to get real name
+          const profileResponse = await ApiClient.getProfile();
+          if (profileResponse.success && profileResponse.data) {
+            setUser({
+              id: profileResponse.data.id || payload.userId,
+              email: profileResponse.data.email || payload.email,
+              name: profileResponse.data.name || payload.name || 'User',
+              role: profileResponse.data.role || payload.role || 'USER',
+            });
+          }
+        } catch (e) {
+          console.error('Failed to initialize auth:', e);
+        }
       }
       setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
+    };
+
+    initAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -69,13 +82,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userObj = {
             id: payload.userId || 'unknown-id',
             email: email,
-            name: email.split('@')[0], 
+            name: payload.name || email.split('@')[0], 
             role: payload.role || 'USER'
           };
         } catch (e) {
           userObj = { id: 'unknown-id', email, name: email.split('@')[0], role: 'USER' };
         }
       }
+
+      // Final check: if we still don't have a real name, fetch profile
+      if (userObj && (!userObj.name || userObj.name === 'User' || userObj.name === email.split('@')[0])) {
+        const profileResponse = await ApiClient.getProfile();
+        if (profileResponse.success && profileResponse.data) {
+          userObj = {
+            ...userObj,
+            ...profileResponse.data
+          };
+        }
+      }
+      
       setUser(userObj);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Login failed';

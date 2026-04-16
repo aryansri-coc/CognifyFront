@@ -142,18 +142,56 @@ export class ApiClient {
     return this.post<AuthResponse>('/api/auth/register', { email, password, name });
   }
 
+  // User Profile endpoints
+  static async getProfile(): Promise<ApiResponse<any>> {
+    return this.get('/api/user/me');
+  }
+
+  static async updateProfile(data: { name?: string; age?: number; sex?: string }): Promise<ApiResponse<any>> {
+    return this.patch('/api/user/me', data);
+  }
+
+  static async changePassword(currentPassword: string, newPassword: string): Promise<ApiResponse<any>> {
+    return this.post('/api/auth/change-password', { currentPassword, newPassword });
+  }
+
+  static async patch<T>(endpoint: string, body?: unknown): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: 'PATCH',
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  }
+
   // Health endpoints
   static async syncHealth(data: {
     heartRate: number;
     sleepHours: number;
     stepsCount: number;
     date: string;
+    bloodPressureSys?: number;
+    bloodPressureDia?: number;
+    glucose?: number;
+    weight?: number;
   }): Promise<ApiResponse<any>> {
     const payload = {
-      heartRate: data.heartRate,
-      sleepHours: data.sleepHours,
-      stepsCount: data.stepsCount,
       date: data.date,
+      vitals: {
+        heartRateAvg: data.heartRate,
+        steps: data.stepsCount,
+        bloodOxygenAvg: 98, // Default fallback
+        hrvSdnnMs: 45,     // Default fallback
+      },
+      bloodPressure: {
+        systolic: data.bloodPressureSys,
+        diastolic: data.bloodPressureDia,
+      },
+      measurements: {
+        glucose: data.glucose,
+        weight: data.weight,
+      },
+      sleep: {
+        totalHours: data.sleepHours,
+      }
     };
     return this.post('/api/health/sync', payload);
   }

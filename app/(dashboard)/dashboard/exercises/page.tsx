@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Brain, Clock, TrendingUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface Exercise {
   id: string;
@@ -35,16 +36,9 @@ export default function ExercisesPage() {
       console.log('[v0] API Response for exercises:', response);
 
       if (response.success && response.data) {
-        // Robust mapping to find the array in common response patterns
         const dataArray = Array.isArray(response.data)
           ? response.data
           : (response.data.exercises || response.data.data || response.data.list || []);
-
-        console.log('[v0] Resolved data array:', dataArray);
-
-        if (dataArray.length === 0) {
-          console.warn('[v0] API returned success but empty exercises list.');
-        }
 
         const fetchedExercises = dataArray
           .map((e: any, idx: number) => {
@@ -85,8 +79,6 @@ export default function ExercisesPage() {
             index === self.findIndex((t) => t.id === exercise.id)
           );
         setExercises(fetchedExercises);
-      } else {
-        console.error('[v0] Failed to fetch exercises:', response.error);
       }
     } catch (err) {
       console.error('[v0] Unexpected error in fetchExercises:', err);
@@ -94,103 +86,94 @@ export default function ExercisesPage() {
     setIsLoading(false);
   };
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'easy':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'hard':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default:
-        return '';
-    }
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Brain Games</h1>
-        <p className="text-muted-foreground mt-2">Keep your mind sharp with cognitive exercises</p>
+        <h1 className="text-3xl font-black tracking-tight text-foreground">Brain Gym</h1>
+        <p className="text-muted-foreground mt-2 font-medium">Precision cognitive exercises designed for your progress.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <Brain className="w-10 h-10 text-primary mx-auto mb-2" />
-              <div className="text-3xl font-bold">{exercises.length}</div>
-              <div className="text-sm text-muted-foreground">Exercises Available</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <TrendingUp className="w-10 h-10 text-accent mx-auto mb-2" />
-              <div className="text-3xl font-bold">89</div>
-              <div className="text-sm text-muted-foreground">Average Score</div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <Clock className="w-10 h-10 text-secondary mx-auto mb-2" />
-              <div className="text-3xl font-bold">48</div>
-              <div className="text-sm text-muted-foreground">Minutes Played</div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Summary Metrics Cubes */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-2 border-border rounded-xl overflow-hidden shadow-sm bg-background">
+        <div className="flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-border hover:bg-muted/30 transition-colors">
+          <Brain className="w-8 h-8 text-primary mb-3" />
+          <div className="text-4xl font-black">{exercises.length}</div>
+          <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Available</div>
+        </div>
+        <div className="flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-border hover:bg-muted/30 transition-colors">
+          <TrendingUp className="w-8 h-8 text-accent mb-3" />
+          <div className="text-4xl font-black">89</div>
+          <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Avg Score</div>
+        </div>
+        <div className="flex flex-col items-center justify-center p-8 hover:bg-muted/30 transition-colors">
+          <Clock className="w-8 h-8 text-secondary mb-3" />
+          <div className="text-4xl font-black">48</div>
+          <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Mins Played</div>
+        </div>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+        <div className="flex justify-center py-20">
+          <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
         </div>
       ) : exercises.length === 0 ? (
-        <Card>
-          <CardContent className="py-8 text-center text-muted-foreground">
-            No daily exercises found yet. Check back later!
-          </CardContent>
-        </Card>
+        <div className="p-12 border-2 border-dashed border-border rounded-xl text-center text-muted-foreground">
+          No daily exercises found yet. Check back later!
+        </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {exercises.map((exercise) => (
-            <Card
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-2 border-border rounded-xl overflow-hidden shadow-md">
+          {exercises.map((exercise, index) => (
+            <div 
               key={exercise.id}
-              className="hover:shadow-lg transition-all cursor-pointer hover:-translate-y-1 group"
+              className={cn(
+                "group relative p-8 transition-all duration-300 cursor-pointer hover:bg-muted/50",
+                "border-b border-border",
+                (index + 1) % 3 !== 0 && "lg:border-r border-border",
+                (index + 1) % 2 !== 0 && "md:border-r border-border",
+                "last:border-b-0"
+              )}
               onClick={() => router.push(`/dashboard/exercises/${exercise.id}`)}
             >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg group-hover:text-primary transition-colors">{exercise.name}</CardTitle>
-                    <CardDescription className="mt-1">{exercise.description}</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  <Badge className={getDifficultyColor(exercise.difficulty)}>
-                    {exercise.difficulty}
-                  </Badge>
-                  <Badge variant="outline">{exercise.category}</Badge>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {exercise.duration} min
-                  </span>
-                  {exercise.bestScore && (
-                    <span className="text-primary font-medium">
-                      Best: {exercise.bestScore}%
+              {/* Difficulty Accent */}
+              <div className={cn(
+                "absolute top-0 left-0 w-full h-1.5",
+                exercise.difficulty === 'easy' ? "bg-green-500" : (exercise.difficulty === 'hard' ? "bg-red-500" : "bg-yellow-500")
+              )} />
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Badge variant="outline" className="rounded-none border-primary/30 text-[10px] font-black uppercase tracking-widest">
+                      {exercise.category}
+                    </Badge>
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {exercise.duration} MIN
                     </span>
-                  )}
+                  </div>
+                  <h3 className="text-xl font-black tracking-tight group-hover:text-primary transition-colors leading-tight">
+                    {exercise.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2 font-medium">
+                    {exercise.description}
+                  </p>
                 </div>
-                <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground">Play</Button>
-              </CardContent>
-            </Card>
+
+                <div className="pt-4 flex items-center justify-between border-t border-border/50">
+                   {exercise.bestScore ? (
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase">Best Score</span>
+                        <span className="text-lg font-black text-primary">{exercise.bestScore}%</span>
+                      </div>
+                   ) : (
+                      <div className="text-xs font-semibold text-muted-foreground">No score yet</div>
+                   )}
+                   <Button size="sm" className="rounded-none font-bold px-6 group-hover:translate-x-1 transition-transform">
+                     Play
+                   </Button>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       )}

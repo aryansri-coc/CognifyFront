@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Heart, Moon, Footprints, Thermometer } from 'lucide-react';
+import { Heart, Moon, Footprints, Thermometer, ShieldAlert, Zap } from 'lucide-react';
 import { ApiClient } from '@/lib/api';
+import { cn } from '@/lib/utils';
 
 interface HealthMetric {
   icon: React.ReactNode;
@@ -16,29 +16,29 @@ interface HealthMetric {
 export function HealthSummary() {
   const [metrics, setMetrics] = useState<HealthMetric[]>([
     {
-      icon: <Heart className="w-6 h-6" />,
-      label: 'Heart Rate',
+      icon: <Heart className="w-5 h-5" />,
+      label: 'Cardiac Rhythm',
       value: '--',
-      unit: 'bpm',
+      unit: 'BPM',
       status: 'good',
     },
     {
-      icon: <Moon className="w-6 h-6" />,
-      label: 'Sleep',
+      icon: <Moon className="w-5 h-5" />,
+      label: 'Delta Recovery',
       value: '--',
-      unit: 'hours',
+      unit: 'HRS',
       status: 'good',
     },
     {
-      icon: <Footprints className="w-6 h-6" />,
-      label: 'Steps',
+      icon: <Footprints className="w-5 h-5" />,
+      label: 'Kinetic Output',
       value: '--',
-      unit: 'steps',
+      unit: 'STEPS',
       status: 'fair',
     },
     {
-      icon: <Thermometer className="w-6 h-6" />,
-      label: 'Temperature',
+      icon: <Thermometer className="w-5 h-5" />,
+      label: 'Thermal Status',
       value: '--',
       unit: '°F',
       status: 'good',
@@ -56,35 +56,35 @@ export function HealthSummary() {
     if (response.success && response.data) {
       const latest = response.data;
       
-      const heartRate = latest.heartRate ?? latest.heartRateAvg ?? 0;
-      const sleepHours = latest.sleepHours ?? latest.sleepTotalHours ?? 0;
-      const steps = latest.stepsCount ?? latest.steps ?? 0;
+      const heartRate = latest.heartRateAvg ?? latest.heartRate ?? 0;
+      const sleepHours = latest.sleepTotalHours ?? latest.sleepHours ?? 0;
+      const steps = latest.steps ?? latest.stepsCount ?? 0;
 
       setMetrics([
         {
-          icon: <Heart className="w-6 h-6" />,
-          label: 'Heart Rate',
+          icon: <Heart className="w-5 h-5" />,
+          label: 'Cardiac Rhythm',
           value: heartRate.toString(),
-          unit: 'bpm',
+          unit: 'BPM',
           status: (heartRate > 60 && heartRate < 100) ? 'good' : 'fair',
         },
         {
-          icon: <Moon className="w-6 h-6" />,
-          label: 'Sleep',
+          icon: <Moon className="w-5 h-5" />,
+          label: 'Delta Recovery',
           value: sleepHours.toString(),
-          unit: 'hours',
+          unit: 'HRS',
           status: sleepHours >= 7 ? 'good' : (sleepHours >= 5 ? 'fair' : 'poor'),
         },
         {
-          icon: <Footprints className="w-6 h-6" />,
-          label: 'Steps',
+          icon: <Footprints className="w-5 h-5" />,
+          label: 'Kinetic Output',
           value: steps.toLocaleString(),
-          unit: 'steps',
+          unit: 'STEPS',
           status: steps >= 8000 ? 'good' : (steps >= 4000 ? 'fair' : 'poor'),
         },
         {
-          icon: <Thermometer className="w-6 h-6" />,
-          label: 'Temperature',
+          icon: <Thermometer className="w-5 h-5" />,
+          label: 'Thermal Status',
           value: '98.6',
           unit: '°F',
           status: 'good',
@@ -94,55 +94,83 @@ export function HealthSummary() {
     setIsLoading(false);
   };
 
-  const getStatusColor = (status: 'good' | 'fair' | 'poor') => {
-    switch (status) {
-      case 'good':
-        return 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800';
-      case 'fair':
-        return 'bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800';
-      case 'poor':
-        return 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
-    }
-  };
-
   const getStatusTextColor = (status: 'good' | 'fair' | 'poor') => {
     switch (status) {
       case 'good':
-        return 'text-green-700 dark:text-green-300';
+        return 'text-green-500';
       case 'fair':
-        return 'text-yellow-700 dark:text-yellow-300';
+        return 'text-yellow-500';
       case 'poor':
-        return 'text-red-700 dark:text-red-300';
+        return 'text-red-500';
     }
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {metrics.map((metric) => (
-        <Card key={metric.label} className={`border-2 ${getStatusColor(metric.status)}`}>
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">{metric.label}</p>
-                <div className="flex items-baseline gap-1 mt-2">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 border-4 border-border rounded-none overflow-hidden shadow-2xl bg-background">
+      {metrics.map((metric, index) => (
+        <div 
+          key={metric.label} 
+          className={cn(
+            "relative group flex flex-col p-8 transition-all duration-300 cursor-pointer hover:bg-muted/30",
+            index < metrics.length - 1 && "border-r-2 border-border",
+            index < 2 && "lg:border-b-0 border-b-2 md:border-b-2 lg:border-r-2 border-border",
+            "last:border-r-0"
+          )}
+          onClick={() => console.log(`Inquiring ${metric.label}`)}
+        >
+          {/* Status Accent Line */}
+          <div className={cn(
+            "absolute top-0 left-0 w-full h-1.5 transition-all duration-500",
+            metric.status === 'good' ? "bg-green-500" : (metric.status === 'fair' ? "bg-yellow-500" : "bg-red-500")
+          )} />
+
+          <div className="flex flex-col gap-6">
+             <div className="flex items-center justify-between">
+                <div className={cn(
+                  "w-10 h-10 border-2 flex items-center justify-center transition-all group-hover:bg-foreground group-hover:text-background",
+                  metric.status === 'good' ? "border-green-500/30 text-green-500" : 
+                  (metric.status === 'fair' ? "border-yellow-500/30 text-yellow-500" : "border-red-500/30 text-red-500")
+                )}>
+                  {metric.icon}
+                </div>
+                {metric.status === 'poor' && (
+                  <ShieldAlert className="w-4 h-4 text-red-500 animate-bounce" />
+                )}
+             </div>
+             
+             <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground opacity-60">
+                  {metric.label}
+                </p>
+                <div className="flex items-baseline gap-2">
                   {isLoading ? (
-                    <div className="w-12 h-6 bg-muted animate-pulse rounded"></div>
+                    <div className="w-16 h-8 bg-muted animate-pulse"></div>
                   ) : (
-                    <span className="text-2xl font-bold text-foreground">{metric.value}</span>
+                    <span className="text-4xl font-black tracking-tighter text-foreground italic">
+                      {metric.value}
+                    </span>
                   )}
-                  {isLoading ? (
-                    <div className="w-8 h-4 bg-muted animate-pulse rounded ml-1"></div>
-                  ) : (
-                    <span className="text-sm text-muted-foreground">{metric.unit}</span>
+                  {!isLoading && (
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                      {metric.unit}
+                    </span>
                   )}
                 </div>
-              </div>
-              <div className={`p-2 rounded-lg ${getStatusTextColor(metric.status)}`}>
-                {metric.icon}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+                <div className="flex items-center gap-1.5 pt-2">
+                   <div className={cn("w-2 h-2 rounded-full", metric.status === 'good' ? "bg-green-500" : (metric.status === 'fair' ? "bg-yellow-500" : "bg-red-500"))} />
+                   <span className={cn("text-[9px] font-black uppercase tracking-widest", getStatusTextColor(metric.status))}>
+                      {metric.status} Status
+                   </span>
+                </div>
+             </div>
+          </div>
+
+          {/* Grid Background Accent */}
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-10 pointer-events-none" />
+          
+          {/* Decorative Corner */}
+          <div className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2 border-transparent group-hover:border-primary transition-all" />
+        </div>
       ))}
     </div>
   );

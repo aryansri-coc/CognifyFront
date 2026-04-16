@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ApiClient } from '@/lib/api';
+import { toast } from 'sonner';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -79,6 +80,7 @@ export default function HealthPage() {
     const response = await ApiClient.syncHealth(payload);
     
     if (response.success) {
+      toast.success('Health data saved successfully');
       await fetchHealthData();
       setFormData({
         heartRate: '',
@@ -91,6 +93,7 @@ export default function HealthPage() {
       });
       setShowAddForm(false);
     } else {
+      toast.error(response.error || 'Failed to add health data');
       console.log('Failed to add health data:', response.error);
     }
   };
@@ -121,14 +124,19 @@ export default function HealthPage() {
                   <label className="block text-sm font-medium mb-1">Heart Rate (bpm)</label>
                   <Input
                     type="number"
+                    min="0"
+                    placeholder="e.g. 72"
                     value={formData.heartRate}
                     onChange={(e) => setFormData({ ...formData, heartRate: e.target.value })}
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">Systolic BP (mmHg)</label>
                   <Input
                     type="number"
+                    min="0"
+                    placeholder="e.g. 120"
                     value={formData.bloodPressureSys}
                     onChange={(e) => setFormData({ ...formData, bloodPressureSys: e.target.value })}
                   />
@@ -137,6 +145,8 @@ export default function HealthPage() {
                   <label className="block text-sm font-medium mb-1">Diastolic BP (mmHg)</label>
                   <Input
                     type="number"
+                    min="0"
+                    placeholder="e.g. 80"
                     value={formData.bloodPressureDia}
                     onChange={(e) => setFormData({ ...formData, bloodPressureDia: e.target.value })}
                   />
@@ -145,6 +155,8 @@ export default function HealthPage() {
                   <label className="block text-sm font-medium mb-1">Blood Glucose (mg/dL)</label>
                   <Input
                     type="number"
+                    min="0"
+                    placeholder="e.g. 95"
                     value={formData.glucose}
                     onChange={(e) => setFormData({ ...formData, glucose: e.target.value })}
                   />
@@ -153,7 +165,9 @@ export default function HealthPage() {
                   <label className="block text-sm font-medium mb-1">Weight (kg)</label>
                   <Input
                     type="number"
+                    min="0"
                     step="0.1"
+                    placeholder="e.g. 70.5"
                     value={formData.weight}
                     onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
                   />
@@ -162,6 +176,8 @@ export default function HealthPage() {
                   <label className="block text-sm font-medium mb-1">Steps</label>
                   <Input
                     type="number"
+                    min="0"
+                    placeholder="e.g. 8000"
                     value={formData.steps}
                     onChange={(e) => setFormData({ ...formData, steps: e.target.value })}
                   />
@@ -170,7 +186,10 @@ export default function HealthPage() {
                   <label className="block text-sm font-medium mb-1">Sleep (hours)</label>
                   <Input
                     type="number"
+                    min="0"
+                    max="24"
                     step="0.5"
+                    placeholder="e.g. 7.5"
                     value={formData.sleepHours}
                     onChange={(e) => setFormData({ ...formData, sleepHours: e.target.value })}
                   />

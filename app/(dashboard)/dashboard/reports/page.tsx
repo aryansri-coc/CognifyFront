@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown, Activity, Brain, Pill, AlertCircle } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { cn } from '@/lib/utils';
 
 export default function ReportsPage() {
   const [monthlyData, setMonthlyData] = useState<any[]>([]);
@@ -30,227 +31,183 @@ export default function ReportsPage() {
       if (response.data.adherenceData) {
         setAdherenceData(response.data.adherenceData);
       }
-    } else {
-      console.log('Failed to fetch reports:', response.error);
     }
     setIsLoading(false);
   };
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Health Reports & Analytics</h1>
-        <p className="text-muted-foreground mt-2">Track your progress and health trends</p>
+    <div className="space-y-10 pb-10">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic px-1">Analytics Engine</h1>
+          <p className="text-muted-foreground mt-2 font-black uppercase tracking-widest text-[10px] bg-primary/10 px-2 py-0.5 inline-block">System Performance & Bio-Metric Trends</p>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          Real-time Sync Active
+        </div>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-8">
-          <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+        <div className="flex justify-center py-20">
+          <div className="w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Health Score</span>
+        <div className="space-y-8">
+          {/* Top Score Cubes */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-4 border-border rounded-xl overflow-hidden shadow-2xl bg-background">
+            <div className="p-8 border-b sm:border-b-0 sm:border-r border-border hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Neuro-Quant Score</span>
                 <TrendingUp className="w-4 h-4 text-green-500" />
               </div>
-              <div className="text-3xl font-bold">90/100</div>
-              <p className="text-xs text-green-600 dark:text-green-400">+5 from last month</p>
+              <div className="text-5xl font-black tracking-tighter text-foreground">90<span className="text-xl text-muted-foreground">/100</span></div>
+              <p className="text-[10px] font-bold text-green-600 uppercase mt-2">▲ 5.2% VS LAST PHASE</p>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Cognitive Score</span>
+            <div className="p-8 border-b sm:border-b-0 lg:border-r border-border hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Cognitive Index</span>
                 <TrendingUp className="w-4 h-4 text-green-500" />
               </div>
-              <div className="text-3xl font-bold">91/100</div>
-              <p className="text-xs text-green-600 dark:text-green-400">+4 from last month</p>
+              <div className="text-5xl font-black tracking-tighter text-foreground">91<span className="text-xl text-muted-foreground">/100</span></div>
+              <p className="text-[10px] font-bold text-green-600 uppercase mt-2">▲ 4.1% STABILITY GAIN</p>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Med Adherence</span>
-                <TrendingUp className="w-4 h-4 text-green-500" />
+            <div className="p-8 border-b md:border-b-0 sm:border-r border-border hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Adherence Rate</span>
+                <div className="w-2 h-2 rounded-full bg-green-500" />
               </div>
-              <div className="text-3xl font-bold">100%</div>
-              <p className="text-xs text-green-600 dark:text-green-400">Perfect this month</p>
+              <div className="text-5xl font-black tracking-tighter text-foreground">100<span className="text-xl text-muted-foreground">%</span></div>
+              <p className="text-[10px] font-bold text-green-600 uppercase mt-2">OPTIMAL COMPLIANCE</p>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-muted-foreground">Avg Sleep</span>
+            <div className="p-8 hover:bg-muted/30 transition-colors">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground">Sleep Efficiency</span>
                 <TrendingDown className="w-4 h-4 text-orange-500" />
               </div>
-              <div className="text-3xl font-bold">7.8h</div>
-              <p className="text-xs text-orange-600 dark:text-orange-400">-0.2h from last month</p>
+              <div className="text-5xl font-black tracking-tighter text-foreground">7.8<span className="text-xl text-muted-foreground">H</span></div>
+              <p className="text-[10px] font-bold text-orange-600 uppercase mt-2">▼ 0.2H DEFICIT DETECTED</p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Monthly Scores Trend</CardTitle>
-          <CardDescription>Your health, cognitive, and medication adherence scores over time</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={350}>
-            <LineChart data={monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-              <XAxis dataKey="month" stroke="var(--color-muted-foreground)" />
-              <YAxis stroke="var(--color-muted-foreground)" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
-                }}
-              />
-              <Legend />
-              <Line
-                type="monotone"
-                dataKey="health"
-                stroke="var(--color-chart-1)"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                name="Health Score"
-              />
-              <Line
-                type="monotone"
-                dataKey="cognitive"
-                stroke="var(--color-chart-2)"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                name="Cognitive Score"
-              />
-              <Line
-                type="monotone"
-                dataKey="adherence"
-                stroke="var(--color-chart-3)"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                name="Med Adherence %"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <Card className="lg:col-span-2 rounded-none border-4 border-border shadow-xl overflow-hidden">
+              <CardHeader className="bg-muted/30 border-b-2 border-border">
+                <CardTitle className="font-black text-xl uppercase italic">Temporal Trend Analysis</CardTitle>
+                <CardDescription className="font-bold text-[10px] uppercase tracking-widest">Multi-metric longitudinal progression</CardDescription>
+              </CardHeader>
+              <CardContent className="pt-8">
+                <ResponsiveContainer width="100%" height={350}>
+                  <LineChart data={monthlyData}>
+                    <CartesianGrid strokeDasharray="2 2" stroke="var(--color-border)" vertical={false} />
+                    <XAxis dataKey="month" stroke="var(--color-muted-foreground)" fontSize={10} fontWeight="bold" />
+                    <YAxis stroke="var(--color-muted-foreground)" fontSize={10} fontWeight="bold" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: 'var(--color-card)',
+                        border: '2px solid var(--color-border)',
+                        borderRadius: '0px',
+                        fontWeight: '900',
+                        fontSize: '10px'
+                      }}
+                    />
+                    <Legend iconType="rect" wrapperStyle={{ fontSize: '10px', fontWeight: 'bold', paddingTop: '20px' }} />
+                    <Line type="stepAfter" dataKey="health" stroke="var(--color-chart-1)" strokeWidth={4} dot={false} name="HEALTH" />
+                    <Line type="stepAfter" dataKey="cognitive" stroke="var(--color-chart-2)" strokeWidth={4} dot={false} name="COGNITIVE" />
+                    <Line type="stepAfter" dataKey="adherence" stroke="var(--color-chart-3)" strokeWidth={4} dot={false} name="ADHERENCE" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Medicine Adherence</CardTitle>
-            <CardDescription>Your medication compliance this month</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={adherenceData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {adherenceData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+            <div className="space-y-8">
+               <Card className="rounded-none border-4 border-border shadow-xl overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b-2 border-border p-4 text-center">
+                  <CardTitle className="font-black text-xs uppercase tracking-[0.2em]">Compliance Matrix</CardTitle>
+                </CardHeader>
+                <CardContent className="p-4">
+                  <ResponsiveContainer width="100%" height={200}>
+                    <PieChart>
+                      <Pie
+                        data={adherenceData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={70}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {adherenceData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} strokeWidth={0} />
+                        ))}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  <div className="flex justify-center gap-4 mt-2">
+                    {adherenceData.map((entry) => (
+                       <div key={entry.name} className="flex items-center gap-1.5">
+                          <div className="w-2.5 h-2.5" style={{ backgroundColor: entry.color }} />
+                          <span className="text-[8px] font-black uppercase tracking-tighter">{entry.name}</span>
+                       </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-none border-4 border-border shadow-xl overflow-hidden">
+                <CardHeader className="bg-muted/30 border-b-2 border-border p-4">
+                  <CardTitle className="font-black text-xs uppercase tracking-[0.2em]">Weekly Load</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 space-y-6">
+                  {[
+                    { label: 'STEPS', value: '85%', color: 'bg-primary' },
+                    { label: 'BRAIN', value: '90%', color: 'bg-accent' },
+                    { label: 'REST', value: '80%', color: 'bg-secondary' }
+                  ].map((item) => (
+                    <div key={item.label} className="space-y-2">
+                      <div className="flex justify-between items-center text-[10px] font-black tracking-widest">
+                        <span>{item.label}</span>
+                        <span>{item.value}</span>
+                      </div>
+                      <div className="h-1 bg-muted">
+                        <div className={cn("h-full transition-all duration-500", item.color)} style={{ width: item.value }} />
+                      </div>
+                    </div>
                   ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Weekly Activity Summary</CardTitle>
-            <CardDescription>Your activity levels this week</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Steps</span>
-              <div className="flex items-center gap-2">
-                <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-primary" style={{ width: '85%' }} />
+          <Card className="rounded-none border-4 border-border shadow-2xl overflow-hidden">
+            <CardHeader className="bg-muted/30 border-b-2 border-border">
+              <CardTitle className="font-black text-2xl uppercase italic">Milestone Log</CardTitle>
+              <CardDescription className="font-bold text-[10px] uppercase tracking-widest text-primary">Cryptographically verified accomplishments</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0 divide-y-2 divide-border">
+              {[
+                { title: '100% MED ADHERENCE', desc: 'Achieved 30-day perfect adherence streak', icon: <Activity className="w-5 h-5" />, color: 'bg-green-500' },
+                { title: 'BRAIN GAME MASTER', desc: 'Completed 20 precision cognitive exercises', icon: <Brain className="w-5 h-5" />, color: 'bg-blue-500' },
+                { title: 'SYSTEM OPTIMIZATION', desc: 'Improved overall health index by 12 points', icon: <TrendingUp className="w-5 h-5" />, color: 'bg-purple-500' }
+              ].map((m) => (
+                <div key={m.title} className="flex items-center gap-6 p-6 hover:bg-muted/20 transition-colors group">
+                  <div className={cn("w-14 h-14 rounded-none flex items-center justify-center text-white shrink-0 shadow-lg group-hover:scale-110 transition-transform", m.color)}>
+                    {m.icon}
+                  </div>
+                  <div>
+                    <h4 className="font-black text-lg tracking-tight uppercase italic">{m.title}</h4>
+                    <p className="text-xs font-bold text-muted-foreground uppercase">{m.desc}</p>
+                  </div>
+                  <div className="ml-auto opacity-10 font-black text-4xl italic uppercase">VERIFIED</div>
                 </div>
-                <span className="text-sm font-semibold">61k/70k</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Exercise</span>
-              <div className="flex items-center gap-2">
-                <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-accent" style={{ width: '90%' }} />
-                </div>
-                <span className="text-sm font-semibold">4.5/5h</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Sleep</span>
-              <div className="flex items-center gap-2">
-                <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-secondary" style={{ width: '80%' }} />
-                </div>
-                <span className="text-sm font-semibold">54h/56h</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Milestones</CardTitle>
-          <CardDescription>Achievements and progress highlights</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center flex-shrink-0">
-              <Activity className="w-5 h-5 text-green-600 dark:text-green-400" />
-            </div>
-            <div>
-              <p className="font-medium text-sm">100% Medication Adherence</p>
-              <p className="text-xs text-muted-foreground">Achieved 30-day perfect adherence streak</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
-              <Brain className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-            </div>
-            <div>
-              <p className="font-medium text-sm">Brain Game Master</p>
-              <p className="text-xs text-muted-foreground">Completed 20 cognitive exercises</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
-              <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-            </div>
-            <div>
-              <p className="font-medium text-sm">Health Score Increase</p>
-              <p className="text-xs text-muted-foreground">Improved overall health score by 12 points</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-        </>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   );

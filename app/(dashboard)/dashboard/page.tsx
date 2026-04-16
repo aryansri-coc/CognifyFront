@@ -3,6 +3,7 @@
 import { useAuth } from '@/contexts/auth-context';
 import { HealthSummary } from '@/components/health-summary';
 import { QuickActions } from '@/components/quick-actions';
+import { WatchIntegration } from '@/components/watch-integration';
 import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
@@ -10,14 +11,19 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-10 pb-10">
-      <div className="px-1">
-        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">
-          SYSTEM STATUS: ONLINE
-        </h1>
-        <p className="text-muted-foreground mt-3 font-black uppercase tracking-widest text-xs flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          Welcome back, {user?.name?.split(' ')[0] || 'Operator'}
-        </p>
+      <div className="px-1 flex justify-between items-end">
+        <div>
+          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">
+            SYSTEM STATUS: ONLINE
+          </h1>
+          <p className="text-muted-foreground mt-3 font-black uppercase tracking-widest text-xs flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            Welcome back, {user?.name?.split(' ')[0] || 'Operator'}
+          </p>
+        </div>
+        <div className="hidden md:block">
+          <p className="text-[10px] font-black uppercase text-muted-foreground opacity-30">V1.0.4-STABLE / ENCRYPTION-ACTIVE</p>
+        </div>
       </div>
 
       <HealthSummary />
@@ -47,10 +53,12 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="bg-muted/10 p-4 text-center mt-auto border-t border-border">
-             <span className="text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.3em]">Cognify OS v1.0.4</span>
+            <span className="text-[8px] font-black text-muted-foreground/40 uppercase tracking-[0.3em]">Cognify OS v1.0.4</span>
           </div>
         </div>
       </div>
+
+      <WatchIntegration />
     </div>
   );
 }

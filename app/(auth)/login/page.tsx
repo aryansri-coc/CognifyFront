@@ -100,7 +100,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-10 pt-10 border-t border-slate-800 text-center flex flex-col gap-4">
-            <Link href="#" className="text-[10px] font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-widest">
+            <Link href="/forgot-password" title="Recover your access key" className="text-[10px] font-bold text-primary hover:text-primary/80 transition-colors uppercase tracking-widest">
               Emergency password recovery
             </Link>
             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">

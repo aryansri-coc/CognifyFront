@@ -30,8 +30,15 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+    const emailRegex = /@(gmail\.com|outlook\.com)$/i;
+    if (!emailRegex.test(email)) {
+      setError('Only Gmail (@gmail.com) and Outlook (@outlook.com) accounts are permitted for registry creation.');
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{6,}$/;
+    if (!passwordRegex.test(password)) {
+      setError('Access Key security insufficient. Requirements: Minimum 6 characters, at least one uppercase letter (A-Z), and at least one special character/symbol.');
       return;
     }
 

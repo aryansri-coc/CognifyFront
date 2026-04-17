@@ -142,6 +142,14 @@ export class ApiClient {
     return this.post<AuthResponse>('/api/auth/register', { email, password, name });
   }
 
+  static async forgotPassword(email: string): Promise<ApiResponse<any>> {
+    return this.post('/api/auth/forgot-password', { email });
+  }
+
+  static async resetPassword(token: string, password: string): Promise<ApiResponse<any>> {
+    return this.post('/api/auth/reset-password', { token, password });
+  }
+
   // User Profile endpoints
   static async getProfile(): Promise<ApiResponse<any>> {
     return this.get('/api/user/me');

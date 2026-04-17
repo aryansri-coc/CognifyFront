@@ -3,6 +3,7 @@
 import { Activity, Brain, Clock, Shield, Zap, Sparkles, TrendingUp, Cpu, Server, Database, Search, Bell, Smartphone } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { NeuralNetworkBackground } from './neural-network-background';
 
 interface AuthLandingProps {
   children?: React.ReactNode;
@@ -14,6 +15,7 @@ export function AuthLanding({ children }: AuthLandingProps) {
       
       {/* Hero Section */}
       <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden border-b-2 border-slate-900 px-8 py-20 lg:py-32">
+        <NeuralNetworkBackground />
         <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
         

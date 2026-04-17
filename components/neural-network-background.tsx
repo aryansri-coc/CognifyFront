@@ -14,7 +14,7 @@ export function NeuralNetworkBackground() {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
-    const particleCount = 80;
+    const particleCount = 65;
     const connectionDistance = 150;
     const mouseConnectionDistance = 200;
 
@@ -81,7 +81,7 @@ export function NeuralNetworkBackground() {
           const distance = Math.sqrt(dx * dx + dy * dy);
           if (distance < mouseConnectionDistance) {
             ctx.strokeStyle = `rgba(255, 220, 130, ${1 - distance / mouseConnectionDistance})`;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(mouse.x, mouse.y);

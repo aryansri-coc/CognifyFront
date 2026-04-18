@@ -102,12 +102,12 @@ export default function ExercisesPage() {
         </div>
         <div className="flex flex-col items-center justify-center p-8 border-b md:border-b-0 md:border-r border-border hover:bg-muted/30 transition-colors">
           <TrendingUp className="w-8 h-8 text-accent mb-3" />
-          <div className="text-4xl font-black">89</div>
+          <div className="text-4xl font-black"></div>
           <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Avg Score</div>
         </div>
         <div className="flex flex-col items-center justify-center p-8 hover:bg-muted/30 transition-colors">
           <Clock className="w-8 h-8 text-secondary mb-3" />
-          <div className="text-4xl font-black">48</div>
+          <div className="text-4xl font-black"></div>
           <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Mins Played</div>
         </div>
       </div>

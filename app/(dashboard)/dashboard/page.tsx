@@ -4,6 +4,8 @@ import { useAuth } from '@/contexts/auth-context';
 import { HealthSummary } from '@/components/health-summary';
 import { QuickActions } from '@/components/quick-actions';
 import { WatchIntegration } from '@/components/watch-integration';
+import { Brain3DAnimation } from '@/components/brain-3d-animation';
+import { AppDownloadBanner } from '@/components/app-download-banner';
 import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
@@ -11,7 +13,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-10 pb-10">
-      <div className="px-1 flex justify-between items-end">
+      <div className="px-1 flex justify-between items-end mb-6">
         <div>
           <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">
             SYSTEM STATUS: ONLINE
@@ -59,6 +61,19 @@ export default function DashboardPage() {
       </div>
 
       <WatchIntegration />
+
+      <Brain3DAnimation />
+
+      <AppDownloadBanner />
+
+      <footer className="mt-16 pt-8 border-t border-border/40 text-center space-y-2 pb-6">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black">
+          Created by Team Orion
+        </p>
+        <p className="text-[8px] font-bold uppercase tracking-[0.75em] text-black/80">
+          Aryan Srivastava  •  Anushka Vajpayee  •  B. Vivek Gowd
+        </p>
+      </footer>
     </div>
   );
 }

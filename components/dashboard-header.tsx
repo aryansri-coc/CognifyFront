@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Menu, LogOut, User, Settings, Bell, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -37,8 +38,10 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           <Menu className="h-5 w-5" />
         </button>
         <div className="hidden lg:flex items-center gap-3">
-           <Zap className="w-5 h-5 text-primary fill-primary animate-pulse" />
-           <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">Neuro-Sync Online</span>
+          <div className="w-6 h-6 overflow-hidden">
+            <Image src="/logo.png" alt="Cognify Logo" width={24} height={24} className="w-full h-full object-cover grayscale brightness-200" />
+          </div>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">Neuro-Sync Online</span>
         </div>
       </div>
 
@@ -56,7 +59,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                 <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-primary transition-colors">Authenticated</span>
                 <span className="text-sm font-black uppercase tracking-tight text-foreground">{user?.name || 'Authorized User'}</span>
               </div>
-              <div className="h-8 w-8 rounded-none border-2 border-zinc-900 bg-zinc-900 dark:border-zinc-100 dark:bg-zinc-100 flex items-center justify-center text-zinc-50 dark:text-zinc-900 group-hover:scale-110 transition-transform">
+              <div className="h-8 w-8 rounded-none border-2 border-foreground bg-foreground flex items-center justify-center text-background group-hover:scale-110 transition-transform">
                 <span className="text-xs font-black">
                   {user?.name?.charAt(0).toUpperCase() || 'U'}
                 </span>
@@ -67,7 +70,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
             <div className="bg-muted/50 p-4 border-b-2 border-border">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">User Identifier</p>
                 <p className="text-sm font-black uppercase text-foreground truncate">{user?.name || 'User'}</p>
-                <p className="text-[9px] font-bold text-muted-foreground truncate italic">{user?.email || 'user@example.com'}</p>
+                <p className="text-[9px] font-bold text-muted-foreground truncate">{user?.email || 'user@example.com'}</p>
             </div>
             
             <div className="p-1">

@@ -189,7 +189,7 @@ export function WatchIntegration() {
     <div className="border-4 border-border rounded-none shadow-2xl bg-background overflow-hidden mt-8">
       <div className="bg-muted/30 p-8 border-b-2 border-border flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="font-black text-2xl uppercase italic tracking-tighter">Integration Journey</h2>
+          <h2 className="font-black text-2xl uppercase tracking-tighter">Integration Journey</h2>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground mt-1 underline decoration-primary decoration-2">Google Fit API Protocol</p>
         </div>
 
@@ -235,11 +235,19 @@ export function WatchIntegration() {
                 </div>
               </div>
 
-              <div className="mt-6 space-y-2 max-w-[200px]">
+              <div className="mt-6 space-y-3 max-w-[200px]">
                 <h3 className="font-black text-xs uppercase tracking-[0.1em]">{step.title}</h3>
                 <p className="text-[10px] font-bold text-muted-foreground leading-relaxed uppercase opacity-80 group-hover:opacity-100 transition-opacity">
                   {step.desc}
                 </p>
+                {index === 0 && (
+                  <a 
+                    href="https://github.com/aryansri-coc/CognifyFront/raw/main/downloads/cognify-app.apk"
+                    className="w-full inline-flex items-center justify-center py-2 border border-primary text-[8px] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all text-center"
+                  >
+                    Get APK Now
+                  </a>
+                )}
               </div>
 
               {index < steps.length - 1 && (

@@ -23,8 +23,8 @@ export function AuthLanding({ children }: AuthLandingProps) {
           
           <div className="flex-1 space-y-10 animate-in fade-in slide-in-from-left-8 duration-1000">
             <div className="flex items-center gap-3">
-               <div className="w-12 h-12 border-2 border-primary/40 flex items-center justify-center bg-primary/10">
-                 <Zap className="w-6 h-6 text-primary fill-primary" />
+               <div className="w-12 h-12 border-2 border-primary/40 flex items-center justify-center bg-primary/10 overflow-hidden">
+                 <Image src="/logo.png" alt="Cognify Logo" width={48} height={48} className="w-full h-full object-cover" />
                </div>
                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-primary">Continuous Intelligence</span>
             </div>

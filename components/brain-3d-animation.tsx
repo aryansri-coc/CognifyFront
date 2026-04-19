@@ -184,7 +184,7 @@ export function Brain3DAnimation() {
       const w = canvas.width / (window.devicePixelRatio || 1);
       const h = canvas.height / (window.devicePixelRatio || 1);
       const centerX = w / 2;
-      const centerY = h / 2 - 20; // Shift up slightly to center the cord
+      const centerY = h / 2 + 40; // Shift down to center the main mass
       const scale = Math.min(w, h) * 0.36;
       const now = Date.now();
 
@@ -224,7 +224,7 @@ export function Brain3DAnimation() {
         const tz = y * Math.sin(state.current.rotation.x) + z * Math.cos(state.current.rotation.x);
         y = ty; z = tz;
         const perspect = 5 / (5 + z);
-        return { sx: x * scale * perspect + centerX, sy: y * scale * perspect + centerY, sz: z, perspect, firing: state.current.firingStates[p.id] };
+        return { sx: x * scale * perspect + centerX, sy: centerY - y * scale * perspect, sz: z, perspect, firing: state.current.firingStates[p.id] };
       });
 
       // Render

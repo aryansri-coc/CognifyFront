@@ -184,7 +184,7 @@ export function Brain3DAnimation() {
       const w = canvas.width / (window.devicePixelRatio || 1);
       const h = canvas.height / (window.devicePixelRatio || 1);
       const centerX = w / 2;
-      const centerY = h / 2 + 40; // Shift down to center the main mass
+      const centerY = h / 2 - 50; // Centered to account for the brainstem length
       const scale = Math.min(w, h) * 0.36;
       const now = Date.now();
 

@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cogniback-production.up.railway.app';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cogniback.onrender.com';
 
 interface ApiResponse<T> {
   success: boolean;
